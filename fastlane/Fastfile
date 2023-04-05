@@ -17,6 +17,7 @@ default_platform(:android)
 platform :android do
   desc "Creates a new release branch from the current trunk"
   lane :code_freeze do | options |
+    android_codefreeze_prechecks(options)
   end
 end
 
