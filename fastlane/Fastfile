@@ -1,0 +1,22 @@
+UI.user_error!('Please run fastlane via `bundle exec`') unless FastlaneCore::Helper.bundler?
+
+PROJECT_ROOT_FOLDER = File.dirname(File.expand_path(__dir__))
+FASTLANE_FOLDER = File.join(PROJECT_ROOT_FOLDER, 'fastlane')
+
+########################################################################
+# Environment
+########################################################################
+fastlane_require 'dotenv'
+
+ENV['GHHELPER_REPO'] = 'wordpress-mobile/release-toolkit-demo'
+ENV['PROJECT_ROOT_FOLDER'] = File.dirname(File.expand_path(__dir__)) + '/'
+ENV['FL_RELEASE_TOOLKIT_DEFAULT_BRANCH'] = 'trunk'
+
+default_platform(:android)
+
+platform :android do
+  desc "Creates a new release branch from the current trunk"
+  lane :code_freeze do | options |
+  end
+end
+
