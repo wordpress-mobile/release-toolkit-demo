@@ -1,0 +1,17 @@
+# OS X generated file
+.DS_Store
+
+# Silver Searcher ignore file
+.agignore
+
+# ripgrep ignore file
+.rgignore
+
+# Fastlane
+fastlane/.env*
+fastlane/report.xml
+fastlane/README.md
+
+# Bundler
+/.bundle
+/vendor
