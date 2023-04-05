@@ -1,0 +1,35 @@
+# This pipeline is meant to be run via the Buildkite API, and is
+# only used for beta builds
+
+# Nodes with values to reuse in the pipeline.
+common_params:
+  # Common plugin settings to use with the `plugins` key.
+  - &common_plugins
+    - automattic/a8c-ci-toolkit#2.15.0
+
+steps:
+  - block: "Start Code Freeze"
+    prompt: "Ready to cut the release branch from trunk?"
+
+  - command: |
+      bundle install
+      bundle exec fastlane code_freeze
+
+  - block: "Complete Code Freeze"
+    prompt: |
+      Be sure to verify that you have updated the libraries to a stable versions
+      and that you've updated the Editorialized Release Notes
+      (if they're available already) before continuing
+
+  - command: |
+      echo "This is where we'll complete the code freeze"
+      curl -L https://api.github.com/meta | jq -r '.ssh_keys | .[]' | sed -e 's/^/github.com /' >> ~/.ssh/known_hosts
+      git remote set-url origin git@github.com:wordpress-mobile/WordPress-Android.git
+      # Testing if we are able to create a new branch and push to remote
+      git config --global user.email "mobile@automattic.com"
+      git config --global user.name "Buildkite"
+      git checkout -b testing/push-from-buildkite
+      touch some-test-file
+      git add some-test-file
+      git commit -m "Testing if we are able to push to remote from Buildkite"
+      git push -u origin testing/push-from-buildkite
