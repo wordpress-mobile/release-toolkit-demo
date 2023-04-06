@@ -18,6 +18,10 @@ steps:
 
       gem install bundler -v 2.3.19
       bundle install
+
+      git status
+      git diff
+
       bundle exec fastlane code_freeze skip_confirm:true
 
   - block: "Complete Code Freeze"
