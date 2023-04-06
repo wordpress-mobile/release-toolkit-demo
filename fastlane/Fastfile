@@ -8,6 +8,7 @@ FASTLANE_FOLDER = File.join(PROJECT_ROOT_FOLDER, 'fastlane')
 ########################################################################
 fastlane_require 'dotenv'
 
+Dotenv.load('~/.release-toolkit-demo-env.default')
 ENV['GHHELPER_REPO'] = 'wordpress-mobile/release-toolkit-demo'
 ENV['PROJECT_ROOT_FOLDER'] = File.dirname(File.expand_path(__dir__)) + '/'
 ENV['FL_RELEASE_TOOLKIT_DEFAULT_BRANCH'] = 'trunk'
