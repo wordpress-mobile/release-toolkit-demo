@@ -16,6 +16,7 @@ steps:
       git config --global user.email "mobile@automattic.com"
       git config --global user.name "Buildkite"
 
+      gem install bundler -v 2.3.19
       bundle install
       bundle exec fastlane code_freeze skip_confirm:true
 
