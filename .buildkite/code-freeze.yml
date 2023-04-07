@@ -8,10 +8,12 @@ common_params:
     - automattic/a8c-ci-toolkit#2.15.0
 
 steps:
-  - block: "Start Code Freeze"
+  - block: "Start Code Freeze?"
     prompt: "Ready to cut the release branch from trunk?"
 
-  - command: |
+  - label: "Code Freeze"
+    key: "code_freeze"
+    command: |
       curl -L https://api.github.com/meta | jq -r '.ssh_keys | .[]' | sed -e 's/^/github.com /' >> ~/.ssh/known_hosts
       git config --global user.email "mobile@automattic.com"
       git config --global user.name "Buildkite"
@@ -20,13 +22,15 @@ steps:
 
       bundle exec fastlane code_freeze skip_confirm:true
 
-  - block: "Complete Code Freeze"
+  - block: "Complete Code Freeze?"
     prompt: |
       Be sure to verify that you have updated the libraries to a stable versions
       and that you've updated the Editorialized Release Notes
       (if they're available already) before continuing
 
-  - command: |
+  - label: "Complete Code Freeze"
+    depends_on: "code_freeze"
+    command: |
       curl -L https://api.github.com/meta | jq -r '.ssh_keys | .[]' | sed -e 's/^/github.com /' >> ~/.ssh/known_hosts
       git config --global user.email "mobile@automattic.com"
       git config --global user.name "Buildkite"
