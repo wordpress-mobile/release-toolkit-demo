@@ -18,13 +18,20 @@ default_platform(:android)
 platform :android do
   desc "Creates a new release branch from the current trunk"
   lane :code_freeze do | options |
-    android_codefreeze_prechecks(options)
+    android_codefreeze_prechecks(skip_confirm: options[:skip_confirm])
 
     android_bump_version_release()
     new_version = android_get_app_version()
 
     setbranchprotection(repository: GHHELPER_REPO, branch: "release/#{new_version}")
     setfrozentag(repository: GHHELPER_REPO, milestone: new_version)
+  end
+
+  lane :complete_code_freeze do |options|
+    android_completecodefreeze_prechecks(skip_confirm: options[:skip_confirm])
+
+    ensure_git_status_clean
+    push_to_git_remote
   end
 
   lane :trigger_code_freeze_in_ci do |options|
