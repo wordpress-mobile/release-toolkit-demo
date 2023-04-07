@@ -23,13 +23,13 @@ steps:
       bundle exec fastlane code_freeze skip_confirm:true
 
   - block: "Complete Code Freeze?"
+    depends_on: "code_freeze"
     prompt: |
       Be sure to verify that you have updated the libraries to a stable versions
       and that you've updated the Editorialized Release Notes
       (if they're available already) before continuing
 
-  - label: "Complete Code Freeze"
-    depends_on: "code_freeze"
+  - label: "Completing Code Freeze"
     command: |
       curl -L https://api.github.com/meta | jq -r '.ssh_keys | .[]' | sed -e 's/^/github.com /' >> ~/.ssh/known_hosts
       git config --global user.email "mobile@automattic.com"
