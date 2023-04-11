@@ -18,6 +18,11 @@ steps:
       git config --global user.email "mobile@automattic.com"
       git config --global user.name "Buildkite"
 
+      if [[ -z "${CODE_FREEZE_VERSION}" ]]; then
+        echo "CODE_FREEZE_VERSION is not set."
+        exit 1
+      fi
+
       bundle install
 
       bundle exec fastlane code_freeze skip_confirm:true
@@ -34,6 +39,8 @@ steps:
       curl -L https://api.github.com/meta | jq -r '.ssh_keys | .[]' | sed -e 's/^/github.com /' >> ~/.ssh/known_hosts
       git config --global user.email "mobile@automattic.com"
       git config --global user.name "Buildkite"
+
+      git checkout release/${CODE_FREEZE_VERSION}
 
       bundle install
 
