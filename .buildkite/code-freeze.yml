@@ -41,6 +41,7 @@ steps:
       git config --global user.name "Buildkite"
 
       git checkout release/${CODE_FREEZE_VERSION}
+      git pull
       git status
 
       bundle install
