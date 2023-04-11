@@ -40,7 +40,8 @@ platform :android do
       buildkite_pipeline: 'release-toolkit-demo',
       branch: 'trunk',
       pipeline_file: 'code-freeze.yml',
-      message: 'Code Freeze in CI'
+      message: 'Code Freeze in CI',
+      environment: { CODE_FREEZE_VERSION: options[:code_freeze_version] }
     )
   end
 end
