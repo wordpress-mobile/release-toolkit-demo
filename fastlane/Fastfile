@@ -28,7 +28,7 @@ platform :android do
   end
 
   lane :complete_code_freeze do |options|
-    android_completecodefreeze_prechecks(skip_confirm: options[:skip_confirm])
+    android_completecodefreeze_prechecks(skip_confirm: options[:skip_confirm], code_freeze_version: options[:code_freeze_version])
 
     ensure_git_status_clean
     push_to_git_remote
