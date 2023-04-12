@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/wordpress-mobile/release-toolkit
-  revision: c2f45fb7e5b87d0d36160d99c84d61a371e66e20
-  branch: add/branch-information-to-complete-code-freeze-error
+  revision: d7f4abe4c2ce208a40bb88a5e24f9680c9b0c168
+  branch: use/git_branch_name_using_HEAD
   specs:
     fastlane-plugin-wpmreleasetoolkit (7.0.0)
       activesupport (>= 6.1.7.1)
