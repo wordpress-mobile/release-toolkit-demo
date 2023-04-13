@@ -4,6 +4,7 @@ PROJECT_ROOT_FOLDER = File.dirname(File.expand_path(__dir__))
 FASTLANE_FOLDER = File.join(PROJECT_ROOT_FOLDER, 'fastlane')
 ORIGINAL_RELEASE_NOTES_PATH = File.join(PROJECT_ROOT_FOLDER, 'RELEASE-NOTES.txt')
 EXTRACTED_RELEASE_NOTES_PATH = File.join(PROJECT_ROOT_FOLDER, 'metadata', 'release_notes.txt')
+PLAY_STORE_STRINGS_PATH = File.join(PROJECT_ROOT_FOLDER, 'metadata', 'PlayStoreStrings.po')
 
 ########################################################################
 # Environment
@@ -51,6 +52,29 @@ platform :android do
       pipeline_file: 'code-freeze.yml',
       message: 'Code Freeze in CI',
       environment: { CODE_FREEZE_VERSION: options[:code_freeze_version] }
+    )
+  end
+
+  lane :update_appstore_strings do |options|
+    ensure_git_status_clean
+
+    version = options.fetch(:version, android_get_app_version)
+
+    files = {
+      release_note: EXTRACTED_RELEASE_NOTES_PATH,
+    }
+
+    an_update_metadata_source(
+      po_file_path: PLAY_STORE_STRINGS_PATH,
+      source_files: files,
+      release_version: version
+    )
+
+    git_add(path: PLAY_STORE_STRINGS_PATH)
+    git_commit(
+      path: PLAY_STORE_STRINGS_PATH,
+      message: "Update `PlayStoreStrings.po` for #{version}",
+      allow_nothing_to_commit: true
     )
   end
 end
