@@ -57,17 +57,6 @@ platform :android do
     )
   end
 
-  lane :trigger_code_freeze_in_ci do |options|
-    buildkite_trigger_build(
-      buildkite_organization: 'automattic',
-      buildkite_pipeline: 'release-toolkit-demo',
-      branch: 'trunk',
-      pipeline_file: 'code-freeze.yml',
-      message: 'Code Freeze in CI',
-      environment: { CODE_FREEZE_VERSION: options[:code_freeze_version] }
-    )
-  end
-
   lane :update_appstore_strings do |options|
     ensure_git_status_clean
 
@@ -88,6 +77,30 @@ platform :android do
       path: PLAY_STORE_STRINGS_PATH,
       message: "Update `PlayStoreStrings.po` for #{version}",
       allow_nothing_to_commit: true
+    )
+  end
+
+  # Lanes to trigger Buildkite
+
+  lane :trigger_code_freeze_in_ci do |options|
+    buildkite_trigger_build(
+      buildkite_organization: 'automattic',
+      buildkite_pipeline: 'release-toolkit-demo',
+      branch: 'trunk',
+      pipeline_file: 'code-freeze.yml',
+      message: 'Code Freeze in CI',
+      environment: { CODE_FREEZE_VERSION: options[:code_freeze_version] }
+    )
+  end
+
+  lane :update_appstore_strings_in_ci do |options|
+    release_version = options[:version]
+    buildkite_trigger_build(
+      buildkite_organization: 'automattic',
+      buildkite_pipeline: 'release-toolkit-demo',
+      branch: "release/#{release_version}",
+      pipeline_file: 'update-release-notes.yml',
+      message: 'Update release notes'
     )
   end
 end
