@@ -37,6 +37,14 @@ platform :android do
     setfrozentag(repository: GHHELPER_REPO, milestone: new_version)
   end
 
+  lane :create_code_freeze_pr do |options|
+    create_pull_request(
+        repo: GHHELPER_REPO,
+        title: 'Merge code freeze to trunk',
+        base: 'trunk'
+    )
+  end
+
   lane :complete_code_freeze do |options|
     android_completecodefreeze_prechecks(skip_confirm: options[:skip_confirm], code_freeze_version: options[:code_freeze_version])
 
