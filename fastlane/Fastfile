@@ -88,6 +88,10 @@ platform :android do
       message: "Update `PlayStoreStrings.po` for #{version}",
       allow_nothing_to_commit: true
     )
+
+    push_to_git_remote(tags: false)
+
+    create_pull_request_from_release_branch(version, "Merge #{version} editorialized release notes to trunk")
   end
 
   #####################################################################################
