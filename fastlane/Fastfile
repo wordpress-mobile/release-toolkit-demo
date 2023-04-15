@@ -48,6 +48,7 @@ platform :android do
     setbranchprotection(repository: GHHELPER_REPO, branch: release_branch)
 
     create_pull_request(
+        token: ENV['GITHUB_TOKEN'],
         repo: GHHELPER_REPO,
         title: "Merge #{code_freeze_version} code freeze to trunk",
         head: release_branch,
