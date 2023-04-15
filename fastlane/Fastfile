@@ -132,7 +132,7 @@ platform :android do
   def create_pull_request_from_release_branch(version, title)
     release_branch = "release/#{version}"
     create_pull_request(
-        token: ENV['GITHUB_TOKEN'],
+        api_token: ENV['GITHUB_TOKEN'],
         repo: GHHELPER_REPO,
         title: title,
         head: release_branch,
