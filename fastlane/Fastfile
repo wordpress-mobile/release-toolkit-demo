@@ -47,15 +47,24 @@ platform :android do
 
     setbranchprotection(repository: GHHELPER_REPO, branch: release_branch)
 
-    create_pull_request(
-        token: ENV['GITHUB_TOKEN'],
-        repo: GHHELPER_REPO,
-        title: "Merge #{code_freeze_version} code freeze to trunk",
-        head: release_branch,
-        base: 'trunk',
-        labels: 'Releases',
-        reviewers: 'oguzkocer'
-    )
+    create_pull_request_from_release_branch(code_freeze_version, "Merge #{code_freeze_version} code freeze to trunk")
+  end
+
+  lane :finalize_release do | options |
+    UI.user_error!('Please use `finalize_hotfix_release` lane for hotfixes') if android_current_branch_is_hotfix
+
+    android_finalize_prechecks(options)
+    android_bump_version_final_release()
+
+    version = android_get_release_version()
+
+    # Wrap up
+    removebranchprotection(repository:GHHELPER_REPO, branch: "release/#{version["name"]}")
+    setfrozentag(repository:GHHELPER_REPO, milestone: version["name"], freeze: false)
+    create_new_milestone(repository:GHHELPER_REPO)
+    close_milestone(repository:GHHELPER_REPO, milestone: version["name"])
+
+    create_pull_request_from_release_branch(version, "Merge #{version} final to trunk")
   end
 
   lane :update_appstore_strings do |options|
@@ -81,8 +90,9 @@ platform :android do
     )
   end
 
-  # Lanes to trigger Buildkite
-
+  #####################################################################################
+  # Triggers for Buildkite
+  #####################################################################################
   lane :trigger_code_freeze_in_ci do |options|
     buildkite_trigger_build(
       buildkite_organization: 'automattic',
@@ -102,6 +112,22 @@ platform :android do
       branch: "release/#{release_version}",
       pipeline_file: 'update-release-notes.yml',
       message: 'Update release notes'
+    )
+  end
+
+  #####################################################################################
+  # Utils
+  #####################################################################################
+  def create_pull_request_from_release_branch(version, title)
+    release_branch = "release/#{version}"
+    create_pull_request(
+        token: ENV['GITHUB_TOKEN'],
+        repo: GHHELPER_REPO,
+        title: title,
+        head: release_branch,
+        base: 'trunk',
+        labels: 'Releases',
+        reviewers: 'oguzkocer'
     )
   end
 end
