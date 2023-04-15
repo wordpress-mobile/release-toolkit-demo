@@ -13,4 +13,4 @@ steps:
 
       bundle install
 
-      bundle exec fastlane finalize_release
+      bundle exec fastlane finalize_release skip_confirm:true
