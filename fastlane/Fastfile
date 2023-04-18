@@ -115,7 +115,8 @@ platform :android do
       buildkite_pipeline: 'release-toolkit-demo',
       branch: "release/#{release_version}",
       pipeline_file: 'finalize-release.yml',
-      message: 'Finalize release'
+      message: 'Finalize release',
+      environment: { RELEASE_VERSION: options[:release_version] }
     )
   end
 
