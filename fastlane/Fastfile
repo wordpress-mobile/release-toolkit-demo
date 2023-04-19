@@ -64,7 +64,7 @@ platform :android do
     create_new_milestone(repository:GHHELPER_REPO)
     close_milestone(repository:GHHELPER_REPO, milestone: version["name"])
 
-    create_pull_request_from_release_branch(version, "Merge #{version} final to trunk")
+    create_pull_request_from_release_branch(version["name"], "Merge #{version["name"]} final to trunk")
   end
 
   lane :update_appstore_strings do |options|
