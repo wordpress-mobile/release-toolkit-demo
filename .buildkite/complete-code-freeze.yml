@@ -5,10 +5,12 @@ common_params:
     - automattic/a8c-ci-toolkit#2.15.0
 
 steps:
-  - label: "Code Freeze"
+  - label: "Complete Code Freeze"
     command: |
       .buildkite/commands/configure-git.sh
+      .buildkite/commands/checkout-release-branch.sh
 
       bundle install
 
-      bundle exec fastlane code_freeze skip_confirm:true
+      # TODO: Remove the `RELEASE_VERSION`
+      bundle exec fastlane complete_code_freeze skip_confirm:true release_version:${RELEASE_VERSION}
