@@ -37,17 +37,17 @@ platform :android do
   end
 
   lane :complete_code_freeze do |options|
-    code_freeze_version = options[:code_freeze_version]
-    release_branch = "release/#{code_freeze_version}"
+    release_version = options[:release_version]
+    release_branch = "release/#{release_version}"
 
-    android_completecodefreeze_prechecks(skip_confirm: options[:skip_confirm], code_freeze_version: code_freeze_version)
+    android_completecodefreeze_prechecks(skip_confirm: options[:skip_confirm], code_freeze_version: release_version)
 
     ensure_git_status_clean
     push_to_git_remote
 
     setbranchprotection(repository: GHHELPER_REPO, branch: release_branch)
 
-    create_pull_request_from_release_branch(code_freeze_version, "Merge #{code_freeze_version} code freeze to trunk")
+    create_pull_request_from_release_branch(release_version, "Merge #{release_version} code freeze to trunk")
   end
 
   lane :finalize_release do | options |
@@ -104,7 +104,7 @@ platform :android do
       branch: 'trunk',
       pipeline_file: 'code-freeze.yml',
       message: 'Code Freeze in CI',
-      environment: { CODE_FREEZE_VERSION: options[:code_freeze_version] }
+      environment: { RELEASE_VERSION: options[:release_version] }
     )
   end
 
@@ -127,7 +127,8 @@ platform :android do
       buildkite_pipeline: 'release-toolkit-demo',
       branch: "release/#{release_version}",
       pipeline_file: 'update-release-notes.yml',
-      message: 'Update release notes'
+      message: 'Update release notes',
+      environment: { RELEASE_VERSION: options[:release_version] }
     )
   end
 

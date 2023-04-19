@@ -16,7 +16,7 @@ steps:
         exit 1
       fi
 
-      # We need to be on a release brnach before finalizing the release. We can't be in a detached HEAD.
+      # Buildkite, by default, checks out a specific commit. We need to be on a release branch instead.
       git checkout release/${RELEASE_VERSION}
 
       bundle install

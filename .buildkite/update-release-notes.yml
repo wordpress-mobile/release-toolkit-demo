@@ -11,6 +11,14 @@ steps:
       git config --global user.email "mobile@automattic.com"
       git config --global user.name "Buildkite"
 
+      if [[ -z "${RELEASE_VERSION}" ]]; then
+        echo "RELEASE_VERSION is not set."
+        exit 1
+      fi
+
+      # Buildkite, by default, checks out a specific commit. We need to be on a release branch instead.
+      git checkout release/${RELEASE_VERSION}
+
       bundle install
 
       bundle exec fastlane update_appstore_strings

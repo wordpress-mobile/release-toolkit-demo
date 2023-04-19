@@ -15,8 +15,8 @@ steps:
       git config --global user.email "mobile@automattic.com"
       git config --global user.name "Buildkite"
 
-      if [[ -z "${CODE_FREEZE_VERSION}" ]]; then
-        echo "CODE_FREEZE_VERSION is not set."
+      if [[ -z "${RELEASE_VERSION}" ]]; then
+        echo "RELEASE_VERSION is not set."
         exit 1
       fi
 
@@ -39,4 +39,4 @@ steps:
 
       bundle install
 
-      bundle exec fastlane complete_code_freeze skip_confirm:true code_freeze_version:${CODE_FREEZE_VERSION}
+      bundle exec fastlane complete_code_freeze skip_confirm:true release_version:${RELEASE_VERSION}
