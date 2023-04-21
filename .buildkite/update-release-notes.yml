@@ -10,6 +10,6 @@ steps:
       .buildkite/commands/configure-git.sh
       .buildkite/commands/checkout-release-branch.sh
 
-      bundle install
+      install_gems
 
       bundle exec fastlane update_appstore_strings

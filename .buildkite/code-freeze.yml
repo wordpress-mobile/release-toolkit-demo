@@ -9,6 +9,6 @@ steps:
     command: |
       .buildkite/commands/configure-git.sh
 
-      bundle install
+      install_gems
 
       bundle exec fastlane code_freeze skip_confirm:true
