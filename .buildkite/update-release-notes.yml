@@ -6,6 +6,7 @@ common_params:
 
 steps:
   - label: "Update release notes"
+    plugins: *common_plugins
     command: |
       .buildkite/commands/configure-git.sh
       .buildkite/commands/checkout-release-branch.sh
