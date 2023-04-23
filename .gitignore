@@ -13,5 +13,4 @@ fastlane/report.xml
 fastlane/README.md
 
 # Bundler
-/.bundle
 /vendor
