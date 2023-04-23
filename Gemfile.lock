@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/wordpress-mobile/release-toolkit
-  revision: d758da28e4c0b62ae1e332f463ebd0c251563981
-  branch: add/code_freeze_version_to_complete_code_freeze_lane
+  revision: 6b1eeee5d66ad458086d4b37d718ad598b7b4580
+  branch: add/current-git-branch
   specs:
     fastlane-plugin-wpmreleasetoolkit (7.0.0)
       activesupport (>= 6.1.7.1)
@@ -206,7 +206,7 @@ GEM
     options (2.3.2)
     optparse (0.1.1)
     os (1.1.4)
-    parallel (1.22.1)
+    parallel (1.23.0)
     plist (3.7.0)
     progress_bar (1.3.3)
       highline (>= 1.6, < 3)
