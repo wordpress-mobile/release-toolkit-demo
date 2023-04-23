@@ -50,6 +50,14 @@ platform :android do
     create_pull_request_from_release_branch(release_version, "Merge #{release_version} code freeze to trunk")
   end
 
+  lane :new_beta_release do | options |
+    android_betabuild_prechecks(options)
+    android_bump_version_beta()
+    new_version = android_get_app_version()
+
+    create_pull_request_from_release_branch(new_version, "Merge #{version["name"]} to trunk")
+  end
+
   lane :finalize_release do | options |
     UI.user_error!('Please use `finalize_hotfix_release` lane for hotfixes') if android_current_branch_is_hotfix
 
