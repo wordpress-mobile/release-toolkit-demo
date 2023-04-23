@@ -40,7 +40,7 @@ platform :android do
     release_version = options[:release_version]
     release_branch = "release/#{release_version}"
 
-    android_completecodefreeze_prechecks(skip_confirm: options[:skip_confirm], code_freeze_version: release_version)
+    android_completecodefreeze_prechecks(skip_confirm: options[:skip_confirm])
 
     ensure_git_status_clean
     push_to_git_remote

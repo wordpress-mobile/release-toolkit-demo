@@ -12,5 +12,4 @@ steps:
 
       install_gems
 
-      # TODO: Remove the `RELEASE_VERSION`
-      bundle exec fastlane complete_code_freeze skip_confirm:true release_version:${RELEASE_VERSION}
+      bundle exec fastlane complete_code_freeze skip_confirm:true
