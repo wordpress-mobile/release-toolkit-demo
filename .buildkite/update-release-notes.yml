@@ -13,4 +13,4 @@ steps:
 
       install_gems
 
-      bundle exec fastlane update_appstore_strings
+      bundle exec fastlane update_appstore_strings version:${RELEASE_VERSION}

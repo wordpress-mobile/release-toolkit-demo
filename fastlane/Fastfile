@@ -37,7 +37,7 @@ platform :android do
   end
 
   lane :complete_code_freeze do |options|
-    release_version = options[:release_version]
+    release_version = android_get_app_version()
     release_branch = "release/#{release_version}"
 
     android_completecodefreeze_prechecks(skip_confirm: options[:skip_confirm])
@@ -53,9 +53,9 @@ platform :android do
   lane :new_beta_release do | options |
     android_betabuild_prechecks(options)
     android_bump_version_beta()
-    new_version = android_get_app_version()
+    release_version = android_get_app_version()
 
-    create_pull_request_from_release_branch(new_version, "Merge #{version["name"]} to trunk")
+    create_pull_request_from_release_branch(release_version, "Merge #{release_version} to trunk")
   end
 
   lane :finalize_release do | options |
@@ -64,15 +64,15 @@ platform :android do
     android_finalize_prechecks(options)
     android_bump_version_final_release()
 
-    version = android_get_release_version()
+    release_version = android_get_release_version()
 
     # Wrap up
-    removebranchprotection(repository:GHHELPER_REPO, branch: "release/#{version["name"]}")
-    setfrozentag(repository:GHHELPER_REPO, milestone: version["name"], freeze: false)
+    removebranchprotection(repository:GHHELPER_REPO, branch: "release/#{release_version}")
+    setfrozentag(repository:GHHELPER_REPO, milestone: release_version, freeze: false)
     create_new_milestone(repository:GHHELPER_REPO)
-    close_milestone(repository:GHHELPER_REPO, milestone: version["name"])
+    close_milestone(repository:GHHELPER_REPO, milestone: release_version)
 
-    create_pull_request_from_release_branch(version["name"], "Merge #{version["name"]} final to trunk")
+    create_pull_request_from_release_branch(release_version, "Merge #{release_version} final to trunk")
   end
 
   lane :update_appstore_strings do |options|
