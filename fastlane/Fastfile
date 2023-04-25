@@ -156,7 +156,7 @@ platform :android do
   #####################################################################################
   def create_pull_request_from_release_branch(version, title)
     release_branch = "release/#{version}"
-    new_branch = title.downcase.tr(' ', '-')
+    merge_branch = title.downcase.tr(' ', '-')
     Fastlane::Helper::GitHelper.create_branch(merge_branch, from: release_branch)
     create_pull_request(
         api_token: ENV['GITHUB_TOKEN'],
