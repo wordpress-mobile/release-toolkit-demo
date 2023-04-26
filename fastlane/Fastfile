@@ -169,7 +169,7 @@ platform :android do
   # Utils
   #####################################################################################
   def create_pull_request(head_branch, base_branch, title)
-    merge_branch = pr_title.downcase.tr(' ', '-')
+    merge_branch = title.downcase.tr(' ', '-')
     Fastlane::Helper::GitHelper.create_branch(merge_branch, from: head_branch)
     create_pull_request(
         api_token: ENV['GITHUB_TOKEN'],
