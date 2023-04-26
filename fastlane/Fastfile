@@ -47,15 +47,24 @@ platform :android do
 
     setbranchprotection(repository: GHHELPER_REPO, branch: release_branch)
 
-    create_pull_request_from_release_branch(release_version, "Merge #{release_version} code freeze to trunk")
+    pr_title = "Merge #{release_version} code freeze to trunk"
+    merge_branch = pr_title.downcase.tr(' ', '-')
+    Fastlane::Helper::GitHelper.create_branch(merge_branch, from: release_branch)
+    create_pull_request(release_branch, 'trunk', pr_title)
   end
 
   lane :new_beta_release do | options |
     android_betabuild_prechecks(options)
     android_bump_version_beta()
-    release_version = android_get_app_version()
 
-    create_pull_request_from_release_branch(release_version, "Merge #{release_version} to trunk")
+    app_version = android_get_app_version()
+    release_version = android_get_release_version()["name"]
+    release_branch = "release/#{app_version}"
+
+    pr_title = "Merge #{release_version} to trunk"
+    merge_branch = pr_title.downcase.tr(' ', '-')
+    Fastlane::Helper::GitHelper.create_branch(merge_branch, from: release_branch)
+    create_pull_request(merge_branch, release_branch, pr_title)
   end
 
   lane :finalize_release do | options |
@@ -72,7 +81,7 @@ platform :android do
     create_new_milestone(repository:GHHELPER_REPO)
     close_milestone(repository:GHHELPER_REPO, milestone: release_version)
 
-    create_pull_request_from_release_branch(release_version, "Merge #{release_version} final to trunk")
+    #create_pull_request_from_release_branch(release_version, "Merge #{release_version} final to trunk")
   end
 
   lane :update_appstore_strings do |options|
@@ -99,7 +108,7 @@ platform :android do
 
     push_to_git_remote(tags: false)
 
-    create_pull_request_from_release_branch(version, "Merge #{version} editorialized release notes to trunk")
+    #create_pull_request_from_release_branch(version, "Merge #{version} editorialized release notes to trunk")
   end
 
   #####################################################################################
@@ -164,16 +173,13 @@ platform :android do
   #####################################################################################
   # Utils
   #####################################################################################
-  def create_pull_request_from_release_branch(version, title)
-    release_branch = "release/#{version}"
-    merge_branch = title.downcase.tr(' ', '-')
-    Fastlane::Helper::GitHelper.create_branch(merge_branch, from: release_branch)
+  def create_pull_request(head_branch, base_branch, title)
     create_pull_request(
         api_token: ENV['GITHUB_TOKEN'],
         repo: GHHELPER_REPO,
         title: title,
-        head: merge_branch,
-        base: 'trunk',
+        head: head_branch,
+        base: base_branch,
         labels: 'Releases',
         reviewers: 'oguzkocer'
     )
