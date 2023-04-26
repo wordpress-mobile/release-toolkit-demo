@@ -10,16 +10,17 @@ msgstr ""
 "X-Generator: VsCode\n"
 "Project-Id-Version: Release Notes & Play Store Descriptions\n"
 
+msgctxt "release_note_223"
+msgid ""
+"22.3:\n"
+"* Feature A\n"
+"\n"
+msgstr ""
+
 msgctxt "release_note_222"
 msgid ""
 "22.2:\n"
 "* Edit in release/22.2 branch\n"
 "* Bug fixes\n"
-msgstr ""
-
-msgctxt "release_note_221"
-msgid ""
-"22.1:\n"
-"Placeholder release notes"
 msgstr ""
 
