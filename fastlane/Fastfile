@@ -139,7 +139,17 @@ platform :android do
     )
   end
 
-  lane :update_appstore_strings_in_ci do |options|
+  lane :trigger_new_beta_release_in_ci do |options|
+    buildkite_trigger_build(
+      buildkite_organization: 'automattic',
+      buildkite_pipeline: 'release-toolkit-demo',
+      branch: 'trunk',
+      pipeline_file: 'new-beta-release.yml',
+      message: 'New beta release'
+    )
+  end
+
+  lane :trigger_update_appstore_strings_in_ci do |options|
     release_version = options[:release_version]
     buildkite_trigger_build(
       buildkite_organization: 'automattic',
