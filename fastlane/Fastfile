@@ -47,10 +47,7 @@ platform :android do
 
     setbranchprotection(repository: GHHELPER_REPO, branch: release_branch)
 
-    pr_title = "Merge #{release_version} code freeze to trunk"
-    merge_branch = pr_title.downcase.tr(' ', '-')
-    Fastlane::Helper::GitHelper.create_branch(merge_branch, from: release_branch)
-    create_pull_request(release_branch, 'trunk', pr_title)
+    create_pull_request(release_branch, 'trunk', "Merge #{release_version} code freeze to trunk")
   end
 
   lane :new_beta_release do | options |
@@ -61,10 +58,7 @@ platform :android do
     release_version = android_get_release_version()["name"]
     release_branch = "release/#{app_version}"
 
-    pr_title = "Merge #{release_version} to trunk"
-    merge_branch = pr_title.downcase.tr(' ', '-')
-    Fastlane::Helper::GitHelper.create_branch(merge_branch, from: release_branch)
-    create_pull_request(merge_branch, release_branch, pr_title)
+    create_pull_request(release_branch, release_branch, "Merge #{release_version} to trunk")
   end
 
   lane :finalize_release do | options |
@@ -73,15 +67,16 @@ platform :android do
     android_finalize_prechecks(options)
     android_bump_version_final_release()
 
-    release_version = android_get_release_version()["name"]
+    app_version = android_get_app_version()
+    release_branch = "release/#{app_version}"
 
     # Wrap up
-    removebranchprotection(repository:GHHELPER_REPO, branch: "release/#{release_version}")
+    removebranchprotection(repository:GHHELPER_REPO, branch: release_branch)
     setfrozentag(repository:GHHELPER_REPO, milestone: release_version, freeze: false)
     create_new_milestone(repository:GHHELPER_REPO)
     close_milestone(repository:GHHELPER_REPO, milestone: release_version)
 
-    #create_pull_request_from_release_branch(release_version, "Merge #{release_version} final to trunk")
+    create_pull_request(release_branch, release_branch, "Merge #{release_version} final to trunk")
   end
 
   lane :update_appstore_strings do |options|
@@ -106,9 +101,9 @@ platform :android do
       allow_nothing_to_commit: true
     )
 
-    push_to_git_remote(tags: false)
-
-    #create_pull_request_from_release_branch(version, "Merge #{version} editorialized release notes to trunk")
+    app_version = android_get_app_version()
+    release_branch = "release/#{app_version}"
+    create_pull_request(release_branch, release_branch, "Merge #{version} editorialized release notes to trunk")
   end
 
   #####################################################################################
@@ -174,6 +169,8 @@ platform :android do
   # Utils
   #####################################################################################
   def create_pull_request(head_branch, base_branch, title)
+    merge_branch = pr_title.downcase.tr(' ', '-')
+    Fastlane::Helper::GitHelper.create_branch(merge_branch, from: head_branch)
     create_pull_request(
         api_token: ENV['GITHUB_TOKEN'],
         repo: GHHELPER_REPO,
