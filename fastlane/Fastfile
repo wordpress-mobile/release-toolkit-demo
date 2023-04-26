@@ -47,7 +47,7 @@ platform :android do
 
     setbranchprotection(repository: GHHELPER_REPO, branch: release_branch)
 
-    create_pull_request(release_branch, 'trunk', "Merge #{release_version} code freeze to trunk")
+    create_pr(release_branch, 'trunk', "Merge #{release_version} code freeze to trunk")
   end
 
   lane :new_beta_release do | options |
@@ -58,7 +58,7 @@ platform :android do
     release_version = android_get_release_version()["name"]
     release_branch = "release/#{app_version}"
 
-    create_pull_request(release_branch, release_branch, "Merge #{release_version} to trunk")
+    create_pr(release_branch, release_branch, "Merge #{release_version} to trunk")
   end
 
   lane :finalize_release do | options |
@@ -76,7 +76,7 @@ platform :android do
     create_new_milestone(repository:GHHELPER_REPO)
     close_milestone(repository:GHHELPER_REPO, milestone: release_version)
 
-    create_pull_request(release_branch, release_branch, "Merge #{release_version} final to trunk")
+    create_pr(release_branch, release_branch, "Merge #{release_version} final to trunk")
   end
 
   lane :update_appstore_strings do |options|
@@ -103,7 +103,7 @@ platform :android do
 
     app_version = android_get_app_version()
     release_branch = "release/#{app_version}"
-    create_pull_request(release_branch, release_branch, "Merge #{version} editorialized release notes to trunk")
+    create_pr(release_branch, release_branch, "Merge #{version} editorialized release notes to trunk")
   end
 
   #####################################################################################
@@ -168,7 +168,7 @@ platform :android do
   #####################################################################################
   # Utils
   #####################################################################################
-  def create_pull_request(head_branch, base_branch, title)
+  def create_pr(head_branch, base_branch, title)
     merge_branch = title.downcase.tr(' ', '-')
     Fastlane::Helper::GitHelper.create_branch(merge_branch, from: head_branch)
     create_pull_request(
