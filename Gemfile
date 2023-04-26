@@ -9,4 +9,4 @@ gem 'nokogiri', '~> 1.14.3'
 
 # gem 'fastlane-plugin-wpmreleasetoolkit', '~> 7.0'
 # gem 'fastlane-plugin-wpmreleasetoolkit', path: '../../release-toolkit'
-gem 'fastlane-plugin-wpmreleasetoolkit', git: 'https://github.com/wordpress-mobile/release-toolkit', branch: 'add/current-branch-and-ignore-branch-filters'
+gem 'fastlane-plugin-wpmreleasetoolkit', git: 'https://github.com/wordpress-mobile/release-toolkit', branch: 'wip/release-management-in-ci'

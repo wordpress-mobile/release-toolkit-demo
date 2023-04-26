@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/wordpress-mobile/release-toolkit
-  revision: b20f62352d4899320324873bb45c51126e803a9d
-  branch: add/current-branch-and-ignore-branch-filters
+  revision: 48c91992b1768cef4f4f6ec69e2248aef7e01938
+  branch: wip/release-management-in-ci
   specs:
     fastlane-plugin-wpmreleasetoolkit (7.0.0)
       activesupport (>= 6.1.7.1)
@@ -183,7 +183,7 @@ GEM
     http-cookie (1.0.5)
       domain_name (~> 0.5)
     httpclient (2.8.3)
-    i18n (1.12.0)
+    i18n (1.13.0)
       concurrent-ruby (~> 1.0)
     jmespath (1.6.2)
     json (2.6.3)
