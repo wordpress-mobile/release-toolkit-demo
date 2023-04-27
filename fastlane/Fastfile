@@ -84,6 +84,9 @@ platform :android do
     ensure_git_status_clean
 
     version = options.fetch(:version, android_get_app_version)
+    release_branch = "release/#{app_version}"
+
+    Fastlane::Helper::GitHelper.create_branch("merge/#{version}-app-store-strings-to-#{release_branch}")
 
     files = {
       release_note: EXTRACTED_RELEASE_NOTES_PATH,
@@ -102,9 +105,7 @@ platform :android do
       allow_nothing_to_commit: true
     )
 
-    app_version = android_get_app_version()
-    release_branch = "release/#{app_version}"
-    create_pr(release_branch, release_branch, "Merge #{version} editorialized release notes to trunk")
+    create_pr(release_branch, "Merge #{version} editorialized release notes to #{release_branch}")
   end
 
   #####################################################################################
