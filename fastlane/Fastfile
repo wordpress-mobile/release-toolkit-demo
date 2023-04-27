@@ -84,9 +84,6 @@ platform :android do
     ensure_git_status_clean
 
     version = options.fetch(:version, android_get_app_version)
-    release_branch = "release/#{app_version}"
-
-    Fastlane::Helper::GitHelper.create_branch("merge/#{version}-app-store-strings-to-#{release_branch}")
 
     files = {
       release_note: EXTRACTED_RELEASE_NOTES_PATH,
@@ -105,6 +102,7 @@ platform :android do
       allow_nothing_to_commit: true
     )
 
+    release_branch = "release/#{app_version}"
     create_pr(release_branch, "Merge #{version} editorialized release notes to #{release_branch}")
   end
 
@@ -159,10 +157,11 @@ platform :android do
 
   lane :trigger_update_appstore_strings_in_ci do |options|
     release_version = options[:release_version]
+    editorial_branch = options[:editorial_branch]
     buildkite_trigger_build(
       buildkite_organization: 'automattic',
       buildkite_pipeline: 'release-toolkit-demo',
-      branch: "release/#{release_version}",
+      branch: "#{editorial_branch}",
       pipeline_file: 'update-release-notes.yml',
       message: 'Update release notes',
       environment: { RELEASE_VERSION: options[:release_version] }
