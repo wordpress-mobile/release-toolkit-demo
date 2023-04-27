@@ -54,11 +54,11 @@ platform :android do
     android_betabuild_prechecks(options)
     android_bump_version_beta()
 
-    app_version = android_get_app_version()
-    release_version = android_get_release_version()["name"]
-    release_branch = "release/#{app_version}"
+    #app_version = android_get_app_version()
+    #release_version = android_get_release_version()["name"]
+    #release_branch = "release/#{app_version}"
 
-    create_pr(release_branch, release_branch, "Merge #{release_version} to trunk")
+    #create_pr(release_branch, release_branch, "Merge #{release_version} to trunk")
   end
 
   lane :finalize_release do | options |
