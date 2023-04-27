@@ -45,7 +45,7 @@ platform :android do
     app_version = android_get_app_version()
     setbranchprotection(repository: GHHELPER_REPO, branch: "release/#{app_version}")
 
-    create_pr('trunk', "Merge #{release_version} code freeze to trunk")
+    create_pr('trunk', "Merge #{app_version} code freeze to trunk")
   end
 
   lane :new_beta_release do | options |
@@ -152,7 +152,8 @@ platform :android do
       buildkite_pipeline: 'release-toolkit-demo',
       branch: "release/#{release_version}",
       pipeline_file: 'new-beta-release.yml',
-      message: 'New beta release'
+      message: 'New beta release',
+      environment: { RELEASE_VERSION: options[:release_version] }
     )
   end
 
