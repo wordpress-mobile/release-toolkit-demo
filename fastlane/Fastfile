@@ -42,8 +42,8 @@ platform :android do
     ensure_git_status_clean
     push_to_git_remote
 
-    release_version = android_get_app_version()
-    setbranchprotection(repository: GHHELPER_REPO, branch: "release/#{release_version}")
+    app_version = android_get_app_version()
+    setbranchprotection(repository: GHHELPER_REPO, branch: "release/#{app_version}")
 
     create_pr('trunk', "Merge #{release_version} code freeze to trunk")
   end
@@ -53,28 +53,31 @@ platform :android do
     android_bump_version_beta()
 
     app_version = android_get_app_version()
-    release_version = android_get_release_version()["name"]
     release_branch = "release/#{app_version}"
+    release_version = android_get_release_version()["name"]
 
-    create_pr(release_branch, "Merge #{release_version}")
+    create_pr(release_branch, "Merge #{release_version} to #{release_branch}")
   end
 
   lane :finalize_release do | options |
     UI.user_error!('Please use `finalize_hotfix_release` lane for hotfixes') if android_current_branch_is_hotfix
 
     android_finalize_prechecks(options)
-    android_bump_version_final_release()
 
     app_version = android_get_app_version()
     release_branch = "release/#{app_version}"
 
-    # Wrap up
+    # Remove branch protection first, so that we can push the final commits directly to the release branch
     removebranchprotection(repository:GHHELPER_REPO, branch: release_branch)
-    setfrozentag(repository:GHHELPER_REPO, milestone: release_version, freeze: false)
-    create_new_milestone(repository:GHHELPER_REPO)
-    close_milestone(repository:GHHELPER_REPO, milestone: release_version)
 
-    create_pr(release_branch, release_branch, "Merge #{release_version} final to trunk")
+    android_bump_version_final_release()
+
+    # Wrap up
+    setfrozentag(repository:GHHELPER_REPO, milestone: app_version, freeze: false)
+    create_new_milestone(repository:GHHELPER_REPO)
+    close_milestone(repository:GHHELPER_REPO, milestone: app_version)
+
+    create_pr('trunk', "Merge #{app_version} final to trunk")
   end
 
   lane :update_appstore_strings do |options|
@@ -142,10 +145,11 @@ platform :android do
   end
 
   lane :trigger_new_beta_release_in_ci do |options|
+    release_version = options[:release_version]
     buildkite_trigger_build(
       buildkite_organization: 'automattic',
       buildkite_pipeline: 'release-toolkit-demo',
-      branch: 'trunk',
+      branch: "release/#{release_version}",
       pipeline_file: 'new-beta-release.yml',
       message: 'New beta release'
     )
