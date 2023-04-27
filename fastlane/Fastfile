@@ -37,28 +37,26 @@ platform :android do
   end
 
   lane :complete_code_freeze do |options|
-    release_version = android_get_app_version()
-    release_branch = "release/#{release_version}"
-
     android_completecodefreeze_prechecks(skip_confirm: options[:skip_confirm])
 
     ensure_git_status_clean
     push_to_git_remote
 
-    setbranchprotection(repository: GHHELPER_REPO, branch: release_branch)
+    release_version = android_get_app_version()
+    setbranchprotection(repository: GHHELPER_REPO, branch: "release/#{release_version}")
 
-    create_pr(release_branch, 'trunk', "Merge #{release_version} code freeze to trunk")
+    create_pr('trunk', "Merge #{release_version} code freeze to trunk")
   end
 
   lane :new_beta_release do | options |
     android_betabuild_prechecks(options)
     android_bump_version_beta()
 
-    #app_version = android_get_app_version()
-    #release_version = android_get_release_version()["name"]
-    #release_branch = "release/#{app_version}"
+    app_version = android_get_app_version()
+    release_version = android_get_release_version()["name"]
+    release_branch = "release/#{app_version}"
 
-    #create_pr(release_branch, release_branch, "Merge #{release_version} to trunk")
+    create_pr(release_branch, "Merge #{release_version}")
   end
 
   lane :finalize_release do | options |
@@ -168,14 +166,11 @@ platform :android do
   #####################################################################################
   # Utils
   #####################################################################################
-  def create_pr(head_branch, base_branch, title)
-    merge_branch = title.downcase.tr(' ', '-')
-    Fastlane::Helper::GitHelper.create_branch(merge_branch, from: head_branch)
+  def create_pr(base_branch, title)
     create_pull_request(
         api_token: ENV['GITHUB_TOKEN'],
         repo: GHHELPER_REPO,
         title: title,
-        head: head_branch,
         base: base_branch,
         labels: 'Releases',
         reviewers: 'oguzkocer'
