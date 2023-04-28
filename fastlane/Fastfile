@@ -84,9 +84,7 @@ platform :android do
     ensure_git_status_clean
 
     version = options.fetch(:version, android_get_app_version)
-    release_branch = "release/#{app_version}"
-
-    Fastlane::Helper::GitHelper.create_branch("merge/#{version}-app-store-strings-to-#{release_branch}")
+    release_branch = "release/#{version}"
 
     files = {
       release_note: EXTRACTED_RELEASE_NOTES_PATH,
