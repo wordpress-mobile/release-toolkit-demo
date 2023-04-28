@@ -56,6 +56,9 @@ platform :android do
     release_branch = "release/#{app_version}"
     release_version = android_get_release_version()["name"]
 
+    # Create an intermediate branch
+    Fastlane::Helper::GitHelper.create_branch("merge/#{release_version}-to-release_#{app-version}")
+
     create_pr(release_branch, "Merge #{release_version} to #{release_branch}")
   end
 
