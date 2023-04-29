@@ -160,10 +160,11 @@ platform :android do
 
   lane :trigger_update_appstore_strings_in_ci do |options|
     release_version = options[:release_version]
+    editorial_branch = options[:editorial_branch]
     buildkite_trigger_build(
       buildkite_organization: 'automattic',
       buildkite_pipeline: 'release-toolkit-demo',
-      branch: "release/#{release_version}",
+      branch: "#{editorial_branch}",
       pipeline_file: 'update-release-notes.yml',
       message: 'Update release notes',
       environment: { RELEASE_VERSION: options[:release_version] }
