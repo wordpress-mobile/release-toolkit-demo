@@ -9,7 +9,6 @@ steps:
     plugins: *common_plugins
     command: |
       .buildkite/commands/configure-git.sh
-      .buildkite/commands/checkout-release-branch.sh
 
       install_gems
 
