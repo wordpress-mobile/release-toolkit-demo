@@ -74,6 +74,7 @@ platform :android do
     removebranchprotection(repository:GHHELPER_REPO, branch: release_branch)
 
     android_bump_version_final_release()
+    push_to_git_remote(tags: false)
 
     # Wrap up
     setfrozentag(repository:GHHELPER_REPO, milestone: app_version, freeze: false)
