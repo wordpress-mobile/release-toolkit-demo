@@ -105,6 +105,7 @@ platform :android do
       message: "Update `PlayStoreStrings.po` for #{version}",
       allow_nothing_to_commit: true
     )
+    push_to_git_remote(tags: false)
 
     create_pr(release_branch, "Merge #{version} editorialized release notes to #{release_branch}")
   end
