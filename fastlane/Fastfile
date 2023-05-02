@@ -83,6 +83,29 @@ platform :android do
     create_pr('trunk', "Merge #{app_version} final to trunk")
   end
 
+  lane :update_appstore_strings2 do |options|
+    ensure_git_status_clean
+
+    version = options.fetch(:version, android_get_app_version)
+
+    files = {
+      release_note: EXTRACTED_RELEASE_NOTES_PATH,
+    }
+
+    an_update_metadata_source(
+      po_file_path: PLAY_STORE_STRINGS_PATH,
+      source_files: files,
+      release_version: version
+    )
+
+    git_add(path: PLAY_STORE_STRINGS_PATH)
+    git_commit(
+      path: PLAY_STORE_STRINGS_PATH,
+      message: "Update `PlayStoreStrings.po` for #{version}",
+      allow_nothing_to_commit: true
+    )
+  end
+
   lane :update_appstore_strings do |options|
     ensure_git_status_clean
 
