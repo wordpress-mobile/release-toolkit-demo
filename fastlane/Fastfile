@@ -32,6 +32,7 @@ platform :android do
       extracted_notes_file_path: EXTRACTED_RELEASE_NOTES_PATH
     )
     android_update_release_notes(new_version: new_version)
+    push_to_git_remote(tags: false)
 
     setfrozentag(repository: GHHELPER_REPO, milestone: new_version)
   end
@@ -40,7 +41,7 @@ platform :android do
     android_completecodefreeze_prechecks(skip_confirm: options[:skip_confirm])
 
     ensure_git_status_clean
-    push_to_git_remote
+    push_to_git_remote(tags: false)
 
     app_version = android_get_app_version()
     setbranchprotection(repository: GHHELPER_REPO, branch: "release/#{app_version}")
@@ -58,6 +59,7 @@ platform :android do
 
     # Create an intermediate branch
     Fastlane::Helper::GitHelper.create_branch("merge/#{release_version}-to-release_#{app_version}")
+    push_to_git_remote(tags: false)
 
     create_pr(release_branch, "Merge #{release_version} to #{release_branch}")
   end
