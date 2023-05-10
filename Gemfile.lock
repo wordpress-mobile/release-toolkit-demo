@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/wordpress-mobile/release-toolkit
-  revision: d3ac6057ae6fc48e1986f9d79d0d3462233ba2a8
-  branch: wip/release-management-in-ci-2
+  revision: e26197f430a919e4d33bce7c69778870ca9e45af
+  branch: remove/git-push-actions
   specs:
     fastlane-plugin-wpmreleasetoolkit (7.0.0)
       activesupport (>= 6.1.7.1)
@@ -12,7 +12,7 @@ GIT
       git (~> 1.3)
       google-cloud-storage (~> 1.31)
       nokogiri (~> 1.11)
-      octokit (~> 4.18)
+      octokit (~> 5.6)
       parallel (~> 1.14)
       plist (~> 3.1)
       progress_bar (~> 1.3)
@@ -34,16 +34,16 @@ GEM
     artifactory (3.0.15)
     atomos (0.1.3)
     aws-eventstream (1.2.0)
-    aws-partitions (1.757.0)
-    aws-sdk-core (3.171.0)
+    aws-partitions (1.762.0)
+    aws-sdk-core (3.172.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.5)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-kms (1.63.0)
+    aws-sdk-kms (1.64.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.121.0)
+    aws-sdk-s3 (1.122.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
@@ -141,7 +141,7 @@ GEM
     git (1.18.0)
       addressable (~> 2.8)
       rchardet (~> 1.8)
-    google-apis-androidpublisher_v3 (0.40.0)
+    google-apis-androidpublisher_v3 (0.41.0)
       google-apis-core (>= 0.11.0, < 2.a)
     google-apis-core (0.11.0)
       addressable (~> 2.5, >= 2.5.1)
@@ -200,7 +200,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.14.3-x86_64-linux)
       racc (~> 1.4)
-    octokit (4.25.1)
+    octokit (5.6.1)
       faraday (>= 1, < 3)
       sawyer (~> 0.9)
     options (2.3.2)
