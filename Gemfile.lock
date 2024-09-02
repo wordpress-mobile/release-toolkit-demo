@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/wordpress-mobile/release-toolkit
-  revision: b7c9ced01de44fb177b3a77bffedd8fd4014f137
-  branch: iangmaia/fix-backmerge-pr
+  revision: 282ab6823c2185b1e83f435d144f79c64382a5a4
+  branch: trunk
   specs:
     fastlane-plugin-wpmreleasetoolkit (11.1.0)
       activesupport (>= 6.1.7.1)
