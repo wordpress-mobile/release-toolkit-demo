@@ -5,6 +5,14 @@ FASTLANE_FOLDER = File.join(PROJECT_ROOT_FOLDER, 'fastlane')
 ORIGINAL_RELEASE_NOTES_PATH = File.join(PROJECT_ROOT_FOLDER, 'RELEASE-NOTES.txt')
 EXTRACTED_RELEASE_NOTES_PATH = File.join(PROJECT_ROOT_FOLDER, 'metadata', 'release_notes.txt')
 PLAY_STORE_STRINGS_PATH = File.join(PROJECT_ROOT_FOLDER, 'metadata', 'PlayStoreStrings.po')
+VERSION_PROPERTIES_PATH = File.join(PROJECT_ROOT_FOLDER, 'version.properties')
+
+# Instantiate versioning classes
+VERSION_CALCULATOR = Fastlane::Wpmreleasetoolkit::Versioning::MarketingVersionCalculator.new
+VERSION_FORMATTER = Fastlane::Wpmreleasetoolkit::Versioning::RCNotationVersionFormatter.new
+BUILD_CODE_FORMATTER = Fastlane::Wpmreleasetoolkit::Versioning::SimpleBuildCodeFormatter.new
+BUILD_CODE_CALCULATOR = Fastlane::Wpmreleasetoolkit::Versioning::SimpleBuildCodeCalculator.new
+VERSION_FILE = Fastlane::Wpmreleasetoolkit::Versioning::AndroidVersionFile.new(version_properties_path: VERSION_PROPERTIES_PATH)
 
 ########################################################################
 # Environment
@@ -84,6 +92,17 @@ platform :android do
     close_milestone(repository:GHHELPER_REPO, milestone: app_version)
 
     create_pr('trunk', "Merge #{app_version} final to trunk")
+  end
+
+  lane :create_backmerge_pr do
+    version = release_version_current
+
+    create_release_backmerge_pull_request(
+      repository: GHHELPER_REPO,
+      source_branch: "release/#{version}",
+      labels: ['Releases'],
+      milestone_title: release_version_next
+    )
   end
 
   lane :update_appstore_strings do |options|
@@ -188,5 +207,31 @@ platform :android do
         labels: 'Releases'
     )
   end
+
+  # Returns the current version name from `version.properties` without needing formatting or calculations
+  def version_name_current
+    VERSION_FILE.read_version_name
+  end
+
+  # Returns the release version of the app in the format `1.2` or `1.2.3` if it is a hotfix
+  #
+  def release_version_current
+    # Read the current release version from `version.properties` and parse it into an AppVersion object
+    current_version = VERSION_FORMATTER.parse(VERSION_FILE.read_version_name)
+    # Return the formatted release version
+    VERSION_FORMATTER.release_version(current_version)
+  end
+
+  #  Returns the next release version of the app in the format `1.2` or `1.2.3` if it is a hotfix
+  #
+  def release_version_next
+    # Read the current release version from `version.properties` and parse it into an AppVersion object
+    current_version = VERSION_FORMATTER.parse(VERSION_FILE.read_version_name)
+    # Calculate the next release version
+    release_version_next = VERSION_CALCULATOR.next_release_version(version: current_version)
+    # Return the formatted release version
+    VERSION_FORMATTER.release_version(release_version_next)
+  end
+
 end
 

@@ -1,0 +1,16 @@
+# Nodes with values to reuse in the pipeline.
+common_params:
+  # Common plugin settings to use with the `plugins` key.
+  - &common_plugins
+    - automattic/a8c-ci-toolkit#3.5.1
+
+steps:
+  - label: "Create Backmerge PR"
+    plugins: *common_plugins
+    command: |
+      .buildkite/commands/configure-git.sh
+      .buildkite/commands/checkout-release-branch.sh
+
+      install_gems
+
+      bundle exec fastlane create_backmerge_pr
